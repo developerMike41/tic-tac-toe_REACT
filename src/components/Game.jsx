@@ -1,17 +1,19 @@
-import React from 'react';
-import './../App.css';
-import Board from './Board'
+import React from "react";
+import "./../App.css";
+import Board from "./Board";
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      history: [{
-        squares: Array(9).fill(null),
-      }],
+      history: [
+        {
+          squares: Array(9).fill(null),
+        },
+      ],
       stepNumber: 0,
       xIsNext: true,
-    }
+    };
   }
 
   handleClick(i) {
@@ -23,9 +25,11 @@ class Game extends React.Component {
     }
     squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState({
-      history: history.concat([{
-        squares: squares,
-      }]),
+      history: history.concat([
+        {
+          squares: squares,
+        },
+      ]),
       stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
@@ -34,8 +38,20 @@ class Game extends React.Component {
   jumpTo(step) {
     this.setState({
       stepNumber: step,
-      xIsNext: (step % 2) === 0,
-    })
+      xIsNext: step % 2 === 0,
+    });
+  }
+
+  resetGame() {
+    this.setState({
+      history: [
+        {
+          squares: Array(9).fill(null),
+        },
+      ],
+      stepNumber: 0,
+      xIsNext: true,
+    });
   }
 
   render() {
@@ -46,19 +62,19 @@ class Game extends React.Component {
     if (winner) {
       status = `Winner: ${winner}`;
     } else {
-      status = `Next player: ${this.state.xIsNext ? 'X' : 'O'}`
+      status = `Next player: ${this.state.xIsNext ? "X" : "O"}`;
     }
 
     const moves = history.map((step, move) => {
-      const desc = move ?
-        `Go to move # ${move}` :
-        `Go to game start`;
+      const desc = move ? `Go to move # ${move}` : `Go to game start`;
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
         </li>
-      )
-    })
+      );
+    });
+
+    const reset = <button onClick={() => this.resetGame()}>reset</button>;
 
     return (
       <div className="game">
@@ -70,6 +86,7 @@ class Game extends React.Component {
           />
         </div>
         <div className="game-info">
+          <div>{reset}</div>
           <div>{status}</div>
           <ol>{moves}</ol>
         </div>
